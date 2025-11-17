@@ -1,0 +1,552 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MAO Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #0f172a;
+      color: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: #020617;
+      border-radius: 18px;
+      padding: 24px 24px 28px;
+      max-width: 520px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      border: 1px solid #1f2937;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 20px;
+    }
+
+    .title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: #9ca3af;
+    }
+
+    .formula {
+      font-size: 0.85rem;
+      color: #6b7280;
+      text-align: right;
+    }
+
+    .formula span {
+      color: #e5e7eb;
+      font-weight: 500;
+    }
+
+    .section {
+      margin-bottom: 22px;
+    }
+
+    .section-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .value-input {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-helper {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      margin-bottom: 10px;
+    }
+
+    .current-value {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #f9fafb;
+      white-space: nowrap;
+    }
+
+    .inline-input {
+      width: 90px;
+      padding: 4px 6px;
+      border-radius: 999px;
+      border: 1px solid #374151;
+      background: #020617;
+      color: #e5e7eb;
+      font-size: 0.8rem;
+      text-align: right;
+    }
+
+    .inline-input:focus {
+      outline: none;
+      border-color: #22c55e;
+      box-shadow: 0 0 0 1px #22c55e55;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 6px;
+      border-radius: 999px;
+      background: #111827;
+      outline: none;
+      margin: 10px 0 4px;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #22c55e;
+      cursor: pointer;
+      border: 2px solid #bbf7d0;
+      box-shadow: 0 0 0 4px rgba(34,197,94,0.25);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #22c55e;
+      cursor: pointer;
+      border: 2px solid #bbf7d0;
+      box-shadow: 0 0 0 4px rgba(34,197,94,0.25);
+    }
+
+    .scale-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: #9ca3af;
+      margin-top: 4px;
+    }
+
+    .scale-labels span {
+      width: 25%;
+      text-align: center;
+      padding-top: 4px;
+      border-top: 1px dashed #1f2937;
+    }
+
+    .mao-card {
+      margin-top: 10px;
+      padding: 16px 18px;
+      border-radius: 16px;
+      background: radial-gradient(circle at top left, #22c55e33, transparent 55%),
+                  #020617;
+      border: 1px solid #16a34a;
+      text-align: center;
+    }
+
+    .mao-label {
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #9ca3af;
+      margin-bottom: 6px;
+    }
+
+    .mao-value {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: #bbf7d0;
+      line-height: 1.1;
+    }
+
+    .mao-subtext {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-top: 4px;
+    }
+
+    .summary {
+      margin-top: 16px;
+      font-size: 0.8rem;
+      color: #9ca3af;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .summary-item {
+      flex: 1 1 45%;
+    }
+
+    .summary-label {
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.7rem;
+      color: #6b7280;
+    }
+
+    .summary-value {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #e5e7eb;
+    }
+
+    .crm-note-area {
+      margin-top: 14px;
+    }
+
+    .crm-textarea {
+      width: 100%;
+      background: #020617;
+      border-radius: 12px;
+      border: 1px solid #374151;
+      color: #e5e7eb;
+      padding: 10px 12px;
+      font-size: 0.8rem;
+      resize: none;
+    }
+
+    .crm-textarea:focus {
+      outline: none;
+      border-color: #22c55e;
+      box-shadow: 0 0 0 1px #22c55e55;
+    }
+
+    .copy-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      gap: 10px;
+    }
+
+    .copy-btn {
+      border-radius: 999px;
+      border: 1px solid #22c55e;
+      background: #022c22;
+      color: #bbf7d0;
+      font-size: 0.75rem;
+      padding: 6px 12px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .copy-btn:active {
+      transform: translateY(1px);
+    }
+
+    .copy-status {
+      font-size: 0.7rem;
+      color: #9ca3af;
+    }
+
+    @media (max-width: 520px) {
+      .container {
+        margin: 16px;
+      }
+      .mao-value {
+        font-size: 2rem;
+      }
+      .inline-input {
+        width: 75px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="title">MAO QUICK CALCULATOR</div>
+      <div class="formula">
+        <span>MAO</span> = 70% of ARV − Repairs
+      </div>
+    </div>
+
+    <!-- ARV Slider + Input -->
+    <div class="section">
+      <div class="section-label">
+        <span>After Repair Value (ARV)</span>
+        <div class="value-input">
+          <span class="current-value" id="arv-display">$285,000</span>
+          <input
+            type="number"
+            id="arv-input"
+            class="inline-input"
+            value="285"
+            step="1"
+            min="0"
+          />
+        </div>
+      </div>
+      <div class="section-helper">
+        Slide or type ARV in thousands (e.g. <strong>285</strong> = $285,000). 150–450 recommended.
+      </div>
+      <input
+        type="range"
+        id="arv-slider"
+        min="150000"
+        max="450000"
+        step="5000"
+        value="285000"
+      />
+      <div class="scale-labels">
+        <span>$150k</span>
+        <span>$250k</span>
+        <span>$350k</span>
+        <span>$450k</span>
+      </div>
+    </div>
+
+    <!-- Rehab Slider + Input -->
+    <div class="section">
+      <div class="section-label">
+        <span>Rehab Budget</span>
+        <div class="value-input">
+          <span class="current-value" id="rehab-display">Medium · $45,000</span>
+          <input
+            type="number"
+            id="rehab-input"
+            class="inline-input"
+            value="45000"
+            step="1000"
+            min="0"
+          />
+        </div>
+      </div>
+      <div class="section-helper">
+        Slide for Light / Medium / Large / Gut, or type your exact rehab budget.
+      </div>
+      <!-- 0,1,2,3 map to the 4 rehab options -->
+      <input
+        type="range"
+        id="rehab-slider"
+        min="0"
+        max="3"
+        step="1"
+        value="1"
+      />
+      <div class="scale-labels">
+        <span>Light<br/>$25k</span>
+        <span>Medium<br/>$45k</span>
+        <span>Large<br/>$65k</span>
+        <span>Gut<br/>$85k</span>
+      </div>
+    </div>
+
+    <!-- MAO Display -->
+    <div class="mao-card">
+      <div class="mao-label">MAX ALLOWABLE OFFER</div>
+      <div class="mao-value" id="mao-display">$154,500</div>
+      <div class="mao-subtext">Based on 70% of ARV minus repairs.</div>
+    </div>
+
+    <!-- Summary -->
+    <div class="summary">
+      <div class="summary-item">
+        <div class="summary-label">ARV</div>
+        <div class="summary-value" id="summary-arv">$285,000</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-label">Repairs</div>
+        <div class="summary-value" id="summary-rehab">$45,000 (Medium)</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-label">70% of ARV</div>
+        <div class="summary-value" id="summary-70arv">$199,500</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-label">Formula</div>
+        <div class="summary-value" id="summary-formula">199,500 − 45,000 = 154,500</div>
+      </div>
+    </div>
+
+    <!-- CRM Note -->
+    <div class="section crm-note-area">
+      <div class="copy-row">
+        <span class="section-label" style="margin-bottom:0;">
+          <span>CRM Note (copy & paste)</span>
+        </span>
+        <button class="copy-btn" id="copy-btn">Copy</button>
+      </div>
+      <div class="copy-status" id="copy-status">Ready to copy into your CRM notes.</div>
+      <textarea
+        id="crm-note"
+        class="crm-textarea"
+        rows="4"
+        readonly
+      ></textarea>
+    </div>
+  </div>
+
+  <script>
+    const arvSlider = document.getElementById('arv-slider');
+    const rehabSlider = document.getElementById('rehab-slider');
+
+    const arvDisplay = document.getElementById('arv-display');
+    const rehabDisplay = document.getElementById('rehab-display');
+    const maoDisplay = document.getElementById('mao-display');
+
+    const summaryArv = document.getElementById('summary-arv');
+    const summaryRehab = document.getElementById('summary-rehab');
+    const summary70arv = document.getElementById('summary-70arv');
+    const summaryFormula = document.getElementById('summary-formula');
+
+    const arvInput = document.getElementById('arv-input');
+    const rehabInput = document.getElementById('rehab-input');
+
+    const crmNote = document.getElementById('crm-note');
+    const copyBtn = document.getElementById('copy-btn');
+    const copyStatus = document.getElementById('copy-status');
+
+    const rehabOptions = [
+      { label: 'Light',  amount: 25000 },
+      { label: 'Medium', amount: 45000 },
+      { label: 'Large',  amount: 65000 },
+      { label: 'Gut',    amount: 85000 }
+    ];
+
+    let usingCustomARV = false;
+    let usingCustomRehab = false;
+
+    function formatCurrency(num) {
+      if (isNaN(num)) return '$0';
+      return num.toLocaleString('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        maximumFractionDigits: 0
+      });
+    }
+
+    function updateCRMNote(arv, rehab, mao) {
+      const note = [
+        `ARV: ${formatCurrency(arv)}`,
+        `Assuming Rehab: ${formatCurrency(rehab)}`,
+        `MAO offer: ${formatCurrency(mao)} (make offer)`
+      ].join('\n');
+      crmNote.value = note;
+    }
+
+    function updateValues() {
+      let arv;
+
+      if (usingCustomARV) {
+        const typedThousands = parseInt(arvInput.value, 10);
+        if (!isNaN(typedThousands)) {
+          arv = typedThousands * 1000;
+          // If within slider range, keep slider in sync
+          if (arv >= parseInt(arvSlider.min, 10) && arv <= parseInt(arvSlider.max, 10)) {
+            arvSlider.value = arv;
+          }
+        } else {
+          arv = parseInt(arvSlider.value, 10);
+        }
+      } else {
+        arv = parseInt(arvSlider.value, 10);
+        arvInput.value = Math.round(arv / 1000);
+      }
+
+      let rehab;
+      let rehabLabel;
+
+      if (usingCustomRehab) {
+        const typedRehab = parseInt(rehabInput.value, 10);
+        if (!isNaN(typedRehab)) {
+          rehab = typedRehab;
+        } else {
+          rehab = rehabOptions[parseInt(rehabSlider.value, 10)].amount;
+        }
+        const match = rehabOptions.find(opt => opt.amount === rehab);
+        rehabLabel = match ? match.label : 'Custom';
+      } else {
+        const rehabIndex = parseInt(rehabSlider.value, 10);
+        rehab = rehabOptions[rehabIndex].amount;
+        rehabLabel = rehabOptions[rehabIndex].label;
+        rehabInput.value = rehab;
+      }
+
+      const seventyPctArv = Math.round(arv * 0.7);
+      const mao = seventyPctArv - rehab;
+
+      // Top displays
+      arvDisplay.textContent = formatCurrency(arv);
+      rehabDisplay.textContent = `${rehabLabel} · ${formatCurrency(rehab)}`;
+      maoDisplay.textContent = formatCurrency(mao);
+
+      // Summary section
+      summaryArv.textContent = formatCurrency(arv);
+      summaryRehab.textContent = `${formatCurrency(rehab)} (${rehabLabel})`;
+      summary70arv.textContent = formatCurrency(seventyPctArv);
+      summaryFormula.textContent =
+        `${seventyPctArv.toLocaleString('en-US')} − ${rehab.toLocaleString('en-US')} = ${mao.toLocaleString('en-US')}`;
+
+      // CRM note
+      updateCRMNote(arv, rehab, mao);
+      copyStatus.textContent = 'Ready to copy into your CRM notes.';
+    }
+
+    // Slider events
+    arvSlider.addEventListener('input', () => {
+      usingCustomARV = false;
+      updateValues();
+    });
+
+    rehabSlider.addEventListener('input', () => {
+      usingCustomRehab = false;
+      updateValues();
+    });
+
+    // Input events
+    arvInput.addEventListener('input', () => {
+      usingCustomARV = true;
+      updateValues();
+    });
+
+    rehabInput.addEventListener('input', () => {
+      usingCustomRehab = true;
+      updateValues();
+    });
+
+    // Copy button
+    copyBtn.addEventListener('click', () => {
+      crmNote.select();
+      try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+          copyStatus.textContent = 'Copied! Paste this into your CRM notes.';
+        } else {
+          copyStatus.textContent = 'Select and copy manually (Cmd+C).';
+        }
+      } catch (e) {
+        copyStatus.textContent = 'Select and copy manually (Cmd+C).';
+      }
+    });
+
+    // Initialize on load
+    updateValues();
+  </script>
+</body>
+</html>
