@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>MAO Calculator</title>
+  <title>MAO Calculator – Offers v5</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     * {
@@ -26,7 +25,7 @@
       background: #020617;
       border-radius: 18px;
       padding: 24px 24px 28px;
-      max-width: 520px;
+      max-width: 540px;
       width: 100%;
       box-shadow: 0 20px 40px rgba(0,0,0,0.5);
       border: 1px solid #1f2937;
@@ -72,12 +71,6 @@
       gap: 10px;
     }
 
-    .value-input {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
     .section-helper {
       font-size: 0.75rem;
       color: #9ca3af;
@@ -85,33 +78,41 @@
     }
 
     .current-value {
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       font-weight: 500;
       color: #f9fafb;
-      white-space: nowrap;
     }
 
-    .inline-input {
-      width: 90px;
-      padding: 4px 6px;
+    .value-with-input {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mini-pill {
       border-radius: 999px;
       border: 1px solid #374151;
       background: #020617;
-      color: #e5e7eb;
+      padding: 3px 12px;
       font-size: 0.8rem;
-      text-align: right;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #e5e7eb;
+      white-space: nowrap;
     }
 
-    .inline-input:focus {
-      outline: none;
-      border-color: #22c55e;
-      box-shadow: 0 0 0 1px #22c55e55;
+    .mini-pill input {
+      border: none;
+      background: transparent;
+      width: 60px;
+      text-align: right;
+      color: #e5e7eb;
+      font-size: 0.8rem;
     }
 
     input[type="range"] {
       width: 100%;
-      -webkit-appearance: none;
-      appearance: none;
       height: 6px;
       border-radius: 999px;
       background: #111827;
@@ -120,18 +121,6 @@
     }
 
     input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: #22c55e;
-      cursor: pointer;
-      border: 2px solid #bbf7d0;
-      box-shadow: 0 0 0 4px rgba(34,197,94,0.25);
-    }
-
-    input[type="range"]::-moz-range-thumb {
       width: 18px;
       height: 18px;
       border-radius: 50%;
@@ -149,19 +138,11 @@
       margin-top: 4px;
     }
 
-    .scale-labels span {
-      width: 25%;
-      text-align: center;
-      padding-top: 4px;
-      border-top: 1px dashed #1f2937;
-    }
-
     .mao-card {
       margin-top: 10px;
       padding: 16px 18px;
       border-radius: 16px;
-      background: radial-gradient(circle at top left, #22c55e33, transparent 55%),
-                  #020617;
+      background: radial-gradient(circle at top left, #22c55e33, transparent 55%), #020617;
       border: 1px solid #16a34a;
       text-align: center;
     }
@@ -178,375 +159,193 @@
       font-size: 2.4rem;
       font-weight: 700;
       color: #bbf7d0;
-      line-height: 1.1;
     }
 
-    .mao-subtext {
-      font-size: 0.8rem;
-      color: #9ca3af;
-      margin-top: 4px;
+    .offers {
+      font-size: 0.85rem;
+      margin-top: 6px;
+      text-align: left;
     }
 
     .summary {
       margin-top: 16px;
-      font-size: 0.8rem;
-      color: #9ca3af;
       display: flex;
-      justify-content: space-between;
-      gap: 10px;
       flex-wrap: wrap;
+      gap: 10px;
     }
 
     .summary-item {
       flex: 1 1 45%;
     }
 
-    .summary-label {
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-size: 0.7rem;
-      color: #6b7280;
-    }
-
-    .summary-value {
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: #e5e7eb;
-    }
-
-    .crm-note-area {
+    .crm-summary {
       margin-top: 14px;
-    }
-
-    .crm-textarea {
-      width: 100%;
-      background: #020617;
-      border-radius: 12px;
-      border: 1px solid #374151;
-      color: #e5e7eb;
-      padding: 10px 12px;
-      font-size: 0.8rem;
-      resize: none;
-    }
-
-    .crm-textarea:focus {
-      outline: none;
-      border-color: #22c55e;
-      box-shadow: 0 0 0 1px #22c55e55;
-    }
-
-    .copy-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 6px;
-      gap: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed #1f2937;
     }
 
     .copy-btn {
-      border-radius: 999px;
-      border: 1px solid #22c55e;
-      background: #022c22;
+      margin-top: 8px;
+      background: #064e3b;
       color: #bbf7d0;
-      font-size: 0.75rem;
-      padding: 6px 12px;
+      border: 1px solid #22c55e;
+      padding: 6px 14px;
+      border-radius: 999px;
       cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .copy-btn:active {
-      transform: translateY(1px);
-    }
-
-    .copy-status {
-      font-size: 0.7rem;
-      color: #9ca3af;
-    }
-
-    @media (max-width: 520px) {
-      .container {
-        margin: 16px;
-      }
-      .mao-value {
-        font-size: 2rem;
-      }
-      .inline-input {
-        width: 75px;
-      }
     }
   </style>
 </head>
+
 <body>
-  <div class="container">
-    <div class="header">
-      <div class="title">MAO QUICK CALCULATOR</div>
-      <div class="formula">
-        <span>MAO</span> = 70% of ARV − Repairs
-      </div>
-    </div>
+<div class="container">
+  <div class="header">
+    <div class="title">MAO Quick Calculator</div>
+    <div class="formula"><span>MAO</span> = 70% of ARV − Repairs</div>
+  </div>
 
-    <!-- ARV Slider + Input -->
-    <div class="section">
-      <div class="section-label">
-        <span>After Repair Value (ARV)</span>
-        <div class="value-input">
-          <span class="current-value" id="arv-display">$285,000</span>
-          <input
-            type="number"
-            id="arv-input"
-            class="inline-input"
-            value="285"
-            step="1"
-            min="0"
-          />
+  <!-- ARV Section -->
+  <div class="section">
+    <div class="section-label">
+      <span>After Repair Value (ARV)</span>
+      <div class="value-with-input">
+        <span id="arv-display" class="current-value">$285,000</span>
+        <div class="mini-pill">
+          <input id="arv-input" type="number" value="285" />
+          <span>k</span>
         </div>
       </div>
-      <div class="section-helper">
-        Slide or type ARV in thousands (e.g. <strong>285</strong> = $285,000). 150–450 recommended.
-      </div>
-      <input
-        type="range"
-        id="arv-slider"
-        min="150000"
-        max="450000"
-        step="5000"
-        value="285000"
-      />
-      <div class="scale-labels">
-        <span>$150k</span>
-        <span>$250k</span>
-        <span>$350k</span>
-        <span>$450k</span>
-      </div>
     </div>
 
-    <!-- Rehab Slider + Input -->
-    <div class="section">
-      <div class="section-label">
-        <span>Rehab Budget</span>
-        <div class="value-input">
-          <span class="current-value" id="rehab-display">Medium · $45,000</span>
-          <input
-            type="number"
-            id="rehab-input"
-            class="inline-input"
-            value="45000"
-            step="1000"
-            min="0"
-          />
+    <input type="range" id="arv-slider" min="150000" max="450000" step="5000" value="285000">
+  </div>
+
+  <!-- Rehab Section -->
+  <div class="section">
+    <div class="section-label">
+      <span>Rehab Budget</span>
+      <div class="value-with-input">
+        <span id="rehab-display" class="current-value">Medium · $45,000</span>
+        <div class="mini-pill">
+          <input id="rehab-input" type="number" value="45000" />
+          <span>$</span>
         </div>
       </div>
-      <div class="section-helper">
-        Slide for Light / Medium / Large / Gut, or type your exact rehab budget.
-      </div>
-      <!-- 0,1,2,3 map to the 4 rehab options -->
-      <input
-        type="range"
-        id="rehab-slider"
-        min="0"
-        max="3"
-        step="1"
-        value="1"
-      />
-      <div class="scale-labels">
-        <span>Light<br/>$25k</span>
-        <span>Medium<br/>$45k</span>
-        <span>Large<br/>$65k</span>
-        <span>Gut<br/>$85k</span>
-      </div>
     </div>
 
-    <!-- MAO Display -->
-    <div class="mao-card">
-      <div class="mao-label">MAX ALLOWABLE OFFER</div>
-      <div class="mao-value" id="mao-display">$154,500</div>
-      <div class="mao-subtext">Based on 70% of ARV minus repairs.</div>
-    </div>
+    <input type="range" id="rehab-slider" min="0" max="3" step="1" value="1">
+  </div>
 
-    <!-- Summary -->
-    <div class="summary">
-      <div class="summary-item">
-        <div class="summary-label">ARV</div>
-        <div class="summary-value" id="summary-arv">$285,000</div>
-      </div>
-      <div class="summary-item">
-        <div class="summary-label">Repairs</div>
-        <div class="summary-value" id="summary-rehab">$45,000 (Medium)</div>
-      </div>
-      <div class="summary-item">
-        <div class="summary-label">70% of ARV</div>
-        <div class="summary-value" id="summary-70arv">$199,500</div>
-      </div>
-      <div class="summary-item">
-        <div class="summary-label">Formula</div>
-        <div class="summary-value" id="summary-formula">199,500 − 45,000 = 154,500</div>
-      </div>
-    </div>
+  <!-- MAO + Offers -->
+  <div class="mao-card">
+    <div class="mao-label">Max Allowable Offer</div>
+    <div id="mao-display" class="mao-value">$154,500</div>
 
-    <!-- CRM Note -->
-    <div class="section crm-note-area">
-      <div class="copy-row">
-        <span class="section-label" style="margin-bottom:0;">
-          <span>CRM Note (copy & paste)</span>
-        </span>
-        <button class="copy-btn" id="copy-btn">Copy</button>
-      </div>
-      <div class="copy-status" id="copy-status">Ready to copy into your CRM notes.</div>
-      <textarea
-        id="crm-note"
-        class="crm-textarea"
-        rows="4"
-        readonly
-      ></textarea>
+    <div class="offers">
+      <div id="initial-offer-display">Initial offer (15% below MAO): $0</div>
+      <div id="second-offer-display">Secondary offer (5% below MAO): $0</div>
     </div>
   </div>
 
-  <script>
-    const arvSlider = document.getElementById('arv-slider');
-    const rehabSlider = document.getElementById('rehab-slider');
+  <!-- CRM Summary -->
+  <div class="crm-summary">
+    <div class="crm-label">CRM Summary</div>
+    <pre id="crm-lines" style="white-space: pre-line;"></pre>
+    <button id="copy-btn" class="copy-btn">Copy</button>
+  </div>
+</div>
 
-    const arvDisplay = document.getElementById('arv-display');
-    const rehabDisplay = document.getElementById('rehab-display');
-    const maoDisplay = document.getElementById('mao-display');
+<script>
+const arvSlider = document.getElementById("arv-slider");
+const arvInput = document.getElementById("arv-input");
+const arvDisplay = document.getElementById("arv-display");
 
-    const summaryArv = document.getElementById('summary-arv');
-    const summaryRehab = document.getElementById('summary-rehab');
-    const summary70arv = document.getElementById('summary-70arv');
-    const summaryFormula = document.getElementById('summary-formula');
+const rehabSlider = document.getElementById("rehab-slider");
+const rehabInput = document.getElementById("rehab-input");
+const rehabDisplay = document.getElementById("rehab-display");
 
-    const arvInput = document.getElementById('arv-input');
-    const rehabInput = document.getElementById('rehab-input');
+const maoDisplay = document.getElementById("mao-display");
+const initialOfferDisplay = document.getElementById("initial-offer-display");
+const secondOfferDisplay = document.getElementById("second-offer-display");
+const crmLines = document.getElementById("crm-lines");
+const copyBtn = document.getElementById("copy-btn");
 
-    const crmNote = document.getElementById('crm-note');
-    const copyBtn = document.getElementById('copy-btn');
-    const copyStatus = document.getElementById('copy-status');
+const rehabOptions = [
+  { label: "Light", amount: 25000 },
+  { label: "Medium", amount: 45000 },
+  { label: "Large", amount: 65000 },
+  { label: "Gut", amount: 85000 },
+];
 
-    const rehabOptions = [
-      { label: 'Light',  amount: 25000 },
-      { label: 'Medium', amount: 45000 },
-      { label: 'Large',  amount: 65000 },
-      { label: 'Gut',    amount: 85000 }
-    ];
+function formatCurrency(num) {
+  return num.toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  });
+}
 
-    let usingCustomARV = false;
-    let usingCustomRehab = false;
+function update() {
+  const arv = parseInt(arvSlider.value);
+  const rehab = parseInt(rehabInput.value);
+  const seventy = Math.round(arv * 0.7);
+  const mao = Math.max(0, seventy - rehab);
 
-    function formatCurrency(num) {
-      if (isNaN(num)) return '$0';
-      return num.toLocaleString('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        maximumFractionDigits: 0
-      });
-    }
+  const initial = Math.round(mao * 0.85);
+  const second = Math.round(mao * 0.95);
 
-    function updateCRMNote(arv, rehab, mao) {
-      const note = [
-        `ARV: ${formatCurrency(arv)}`,
-        `Assuming Rehab: ${formatCurrency(rehab)}`,
-        `MAO offer: ${formatCurrency(mao)} (make offer)`
-      ].join('\n');
-      crmNote.value = note;
-    }
+  arvDisplay.textContent = formatCurrency(arv);
+  maoDisplay.textContent = formatCurrency(mao);
+  initialOfferDisplay.textContent =
+    "Initial offer (15% below MAO): " + formatCurrency(initial);
+  secondOfferDisplay.textContent =
+    "Secondary offer (5% below MAO): " + formatCurrency(second);
 
-    function updateValues() {
-      let arv;
+  const rehabLabel =
+    rehabOptions.find((r) => r.amount === rehab)?.label || "Custom";
 
-      if (usingCustomARV) {
-        const typedThousands = parseInt(arvInput.value, 10);
-        if (!isNaN(typedThousands)) {
-          arv = typedThousands * 1000;
-          // If within slider range, keep slider in sync
-          if (arv >= parseInt(arvSlider.min, 10) && arv <= parseInt(arvSlider.max, 10)) {
-            arvSlider.value = arv;
-          }
-        } else {
-          arv = parseInt(arvSlider.value, 10);
-        }
-      } else {
-        arv = parseInt(arvSlider.value, 10);
-        arvInput.value = Math.round(arv / 1000);
-      }
+  rehabDisplay.textContent = `${rehabLabel} · ${formatCurrency(rehab)}`;
 
-      let rehab;
-      let rehabLabel;
+  crmLines.textContent =
+    `ARV: ${formatCurrency(arv)}\n` +
+    `Rehab: ${formatCurrency(rehab)}\n` +
+    `MAO: ${formatCurrency(mao)}\n` +
+    `Initial offer (15% below MAO): ${formatCurrency(initial)}\n` +
+    `Second offer (5% below MAO): ${formatCurrency(second)}`;
+}
 
-      if (usingCustomRehab) {
-        const typedRehab = parseInt(rehabInput.value, 10);
-        if (!isNaN(typedRehab)) {
-          rehab = typedRehab;
-        } else {
-          rehab = rehabOptions[parseInt(rehabSlider.value, 10)].amount;
-        }
-        const match = rehabOptions.find(opt => opt.amount === rehab);
-        rehabLabel = match ? match.label : 'Custom';
-      } else {
-        const rehabIndex = parseInt(rehabSlider.value, 10);
-        rehab = rehabOptions[rehabIndex].amount;
-        rehabLabel = rehabOptions[rehabIndex].label;
-        rehabInput.value = rehab;
-      }
+arvSlider.addEventListener("input", () => {
+  arvInput.value = Math.round(arvSlider.value / 1000);
+  update();
+});
 
-      const seventyPctArv = Math.round(arv * 0.7);
-      const mao = seventyPctArv - rehab;
+arvInput.addEventListener("change", () => {
+  let k = parseInt(arvInput.value);
+  if (k < 150) k = 150;
+  if (k > 450) k = 450;
+  arvSlider.value = k * 1000;
+  update();
+});
 
-      // Top displays
-      arvDisplay.textContent = formatCurrency(arv);
-      rehabDisplay.textContent = `${rehabLabel} · ${formatCurrency(rehab)}`;
-      maoDisplay.textContent = formatCurrency(mao);
+rehabSlider.addEventListener("input", () => {
+  rehabInput.value = rehabOptions[rehabSlider.value].amount;
+  update();
+});
 
-      // Summary section
-      summaryArv.textContent = formatCurrency(arv);
-      summaryRehab.textContent = `${formatCurrency(rehab)} (${rehabLabel})`;
-      summary70arv.textContent = formatCurrency(seventyPctArv);
-      summaryFormula.textContent =
-        `${seventyPctArv.toLocaleString('en-US')} − ${rehab.toLocaleString('en-US')} = ${mao.toLocaleString('en-US')}`;
+rehabInput.addEventListener("change", update);
 
-      // CRM note
-      updateCRMNote(arv, rehab, mao);
-      copyStatus.textContent = 'Ready to copy into your CRM notes.';
-    }
+copyBtn.addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText(crmLines.textContent);
+    copyBtn.textContent = "Copied!";
+    setTimeout(() => (copyBtn.textContent = "Copy"), 1500);
+  } catch {
+    alert("Copy failed. Try manually selecting and copying.");
+  }
+});
 
-    // Slider events
-    arvSlider.addEventListener('input', () => {
-      usingCustomARV = false;
-      updateValues();
-    });
+update();
+</script>
 
-    rehabSlider.addEventListener('input', () => {
-      usingCustomRehab = false;
-      updateValues();
-    });
-
-    // Input events
-    arvInput.addEventListener('input', () => {
-      usingCustomARV = true;
-      updateValues();
-    });
-
-    rehabInput.addEventListener('input', () => {
-      usingCustomRehab = true;
-      updateValues();
-    });
-
-    // Copy button
-    copyBtn.addEventListener('click', () => {
-      crmNote.select();
-      try {
-        const successful = document.execCommand('copy');
-        if (successful) {
-          copyStatus.textContent = 'Copied! Paste this into your CRM notes.';
-        } else {
-          copyStatus.textContent = 'Select and copy manually (Cmd+C).';
-        }
-      } catch (e) {
-        copyStatus.textContent = 'Select and copy manually (Cmd+C).';
-      }
-    });
-
-    // Initialize on load
-    updateValues();
-  </script>
 </body>
 </html>
+
